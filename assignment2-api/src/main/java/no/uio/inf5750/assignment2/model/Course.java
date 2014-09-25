@@ -29,7 +29,7 @@ public class Course
 
     public Course()
     {
-    }
+    } 
 
     public Course( String courseCode, String name )
     {
