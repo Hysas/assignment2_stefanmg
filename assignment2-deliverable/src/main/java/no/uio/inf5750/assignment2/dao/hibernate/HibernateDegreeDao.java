@@ -40,7 +40,7 @@ public class HibernateDegreeDao implements DegreeDAO{
 		try {
 			tx = session.beginTransaction();
 			@SuppressWarnings("unchecked")
-			List<Degree> degrees = session.createQuery("FROM Course ORDER by id DESC").list();
+			List<Degree> degrees = session.createQuery("FROM DEGREE ORDER by id DESC").list();
 			
 			if (!degrees.isEmpty()) {
 				while (degrees.iterator().hasNext()) {

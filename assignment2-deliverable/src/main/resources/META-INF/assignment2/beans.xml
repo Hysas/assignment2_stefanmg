@@ -32,7 +32,7 @@
 		</property>
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.show_sql">true</prop>
+				<!-- <prop key="hibernate.show_sql">true</prop>-->
 				<prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
 				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop> -->
 				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
@@ -45,7 +45,7 @@
 		<property name="driverClass" value="org.h2.Driver" />
 		<property name="jdbcUrl" value="jdbc:h2:mem:inf5750;DB_CLOSE_ON_EXIT=FALSE" />
 		<property name="user" value="sa" />
-		<property name="password" value="sa" />
+		<property name="password" value="" />
 	</bean>
 
 	<bean id="courseDao" class="no.uio.inf5750.assignment2.dao.hibernate.HibernateCourseDao">
@@ -61,9 +61,15 @@
 	</bean>
 	
 	<bean id="studentSystem" class="no.uio.inf5750.assignment2.service.impl.DefaultStudentSystem">		
-		<property name="courseDao" ref="courseDao" />
-		<property name="studentDao" ref="studentDao" />
-		<property name="degreeDao" ref="degreeDao" />
+		<property name="courseDao">
+			<ref bean="courseDao"/>
+		</property>
+		<property name="studentDao">
+			<ref bean="studentDao"/>
+		</property>
+		<property name="degreeDao">
+			<ref bean="degreeDao"/>
+		</property>
 	</bean>
 	
 </beans>

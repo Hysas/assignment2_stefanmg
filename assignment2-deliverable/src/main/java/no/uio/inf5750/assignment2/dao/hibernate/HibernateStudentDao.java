@@ -22,7 +22,7 @@ public class HibernateStudentDao implements StudentDAO{
 	}
 	
 	@Override
-	public int saveStudent(Student student) {
+	public int saveStudent(Student student) {		
 		return (Integer) sessionFactory.getCurrentSession().save(student);
 	}
 

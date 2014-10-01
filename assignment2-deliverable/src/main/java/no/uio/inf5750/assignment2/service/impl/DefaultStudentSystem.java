@@ -13,6 +13,17 @@ public class DefaultStudentSystem implements StudentSystem{
 	private DegreeDAO degreeDao;
 	private StudentDAO studentDao;
 
+	public void setCourseDao(CourseDAO courseDao) {
+		this.courseDao = courseDao;
+	}
+	
+	public void setStudentDao(StudentDAO studentDao) {
+		this.studentDao = studentDao;
+	}
+	
+	public void setDegreeDao(DegreeDAO degreeDao) {
+		this.degreeDao = degreeDao;
+	}
 	
 	@Override
 	public int addCourse(String courseCode, String name) {
@@ -109,7 +120,7 @@ public class DefaultStudentSystem implements StudentSystem{
 	}
 
 	@Override
-	public int addStudent(String name) {
+	public int addStudent(String name) {		
 		return studentDao.saveStudent(new Student(name));
 	}
 
