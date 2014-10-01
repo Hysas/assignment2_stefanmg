@@ -4,164 +4,158 @@ import java.util.Collection;
 import java.util.Set;
 
 import no.uio.inf5750.assignment2.dao.*;
-import no.uio.inf5750.assignment2.model.Course;
-import no.uio.inf5750.assignment2.model.Degree;
-import no.uio.inf5750.assignment2.model.Student;
+import no.uio.inf5750.assignment2.model.*;
 import no.uio.inf5750.assignment2.service.StudentSystem;
 
-import org.springframework.transaction.annotation.Transactional;
-
-
-@Transactional
 public class DefaultStudentSystem implements StudentSystem{
 	
-	CourseDAO course;
-	DegreeDAO degree;
-	StudentDAO student;
+	private CourseDAO courseDao;
+	private DegreeDAO degreeDao;
+	private StudentDAO studentDao;
 
 	
 	@Override
 	public int addCourse(String courseCode, String name) {
-		return course.saveCourse(new Course(courseCode,name));
+		return courseDao.saveCourse(new Course(courseCode,name));
 	}
 
 	@Override
 	public void updateCourse(int courseId, String courseCode, String name) {
-		course.getCourse(courseId).setCourseCode(courseCode);
-		course.getCourse(courseId).setName(name);
+		courseDao.getCourse(courseId).setCourseCode(courseCode);
+		courseDao.getCourse(courseId).setName(name);
 	}
 
 	@Override
 	public Course getCourse(int courseId) {
-		return course.getCourse(courseId);
+		return courseDao.getCourse(courseId);
 	}
 
 	@Override
 	public Course getCourseByCourseCode(String courseCode) {
-		return course.getCourseByCourseCode(courseCode);
+		return courseDao.getCourseByCourseCode(courseCode);
 	}
 
 	@Override
 	public Course getCourseByName(String name) {
-		return course.getCourseByName(name);
+		return courseDao.getCourseByName(name);
 	}
 
 	@Override
 	public Collection<Course> getAllCourses() {
-		return course.getAllCourses();
+		return courseDao.getAllCourses();
 	}
 
 	@Override
 	public void delCourse(int courseId) {
-		course.delCourse(course.getCourse(courseId));
+		courseDao.delCourse(courseDao.getCourse(courseId));
 	}
 
 	@Override
 	public void addAttendantToCourse(int courseId, int studentId) {
-		Set<Student> attendants = course.getCourse(courseId).getAttendants();
-		attendants.add(student.getStudent(studentId));
-		course.getCourse(courseId).setAttendants(attendants);
+		Set<Student> attendants = courseDao.getCourse(courseId).getAttendants();
+		attendants.add(studentDao.getStudent(studentId));
+		courseDao.getCourse(courseId).setAttendants(attendants);
 	}
 
 	@Override
 	public void removeAttendantFromCourse(int courseId, int studentId) {
-		Set<Student> attendants = course.getCourse(courseId).getAttendants();
-		attendants.remove(student.getStudent(studentId));
-		course.getCourse(courseId).setAttendants(attendants);
+		Set<Student> attendants = courseDao.getCourse(courseId).getAttendants();
+		attendants.remove(studentDao.getStudent(studentId));
+		courseDao.getCourse(courseId).setAttendants(attendants);
 	}
 
 	@Override
 	public int addDegree(String type) {
-		return degree.saveDegree(new Degree(type));
+		return degreeDao.saveDegree(new Degree(type));
 	}
 
 	@Override
 	public void updateDegree(int degreeId, String type) {
-		degree.getDegree(degreeId).setType(type);
+		degreeDao.getDegree(degreeId).setType(type);
 	}
 
 	@Override
 	public Degree getDegree(int degreeId) {
-		return degree.getDegree(degreeId);
+		return degreeDao.getDegree(degreeId);
 	}
 
 	@Override
 	public Degree getDegreeByType(String type) {
-		return degree.getDegreeByType(type);
+		return degreeDao.getDegreeByType(type);
 	}
 
 	@Override
 	public Collection<Degree> getAllDegrees() {
-		return degree.getAllDegrees();
+		return degreeDao.getAllDegrees();
 	}
 
 	@Override
 	public void delDegree(int degreeId) {
-		degree.delDegree(degree.getDegree(degreeId));
+		degreeDao.delDegree(degreeDao.getDegree(degreeId));
 	}
 
 	@Override
 	public void addRequiredCourseToDegree(int degreeId, int courseId) {
-		Set<Course> courses =  degree.getDegree(degreeId).getRequiredCourses();
-		courses.add(course.getCourse(courseId));
-		degree.getDegree(degreeId).setRequiredCourses(courses);
+		Set<Course> courses =  degreeDao.getDegree(degreeId).getRequiredCourses();
+		courses.add(courseDao.getCourse(courseId));
+		degreeDao.getDegree(degreeId).setRequiredCourses(courses);
 	}
 
 	@Override
 	public void removeRequiredCourseFromDegree(int degreeId, int courseId) {
-		Set<Course> courses =  degree.getDegree(degreeId).getRequiredCourses();
-		courses.remove(course.getCourse(courseId));
-		degree.getDegree(degreeId).setRequiredCourses(courses);
+		Set<Course> courses =  degreeDao.getDegree(degreeId).getRequiredCourses();
+		courses.remove(courseDao.getCourse(courseId));
+		degreeDao.getDegree(degreeId).setRequiredCourses(courses);
 	}
 
 	@Override
 	public int addStudent(String name) {
-		return student.saveStudent(new Student(name));
+		return studentDao.saveStudent(new Student(name));
 	}
 
 	@Override
 	public void updateStudent(int studentId, String name) {
-		student.getStudent(studentId).setName(name);
+		studentDao.getStudent(studentId).setName(name);
 	}
 
 	@Override
 	public Student getStudent(int studentId) {
-		return student.getStudent(studentId);
+		return studentDao.getStudent(studentId);
 	}
 
 	@Override
 	public Student getStudentByName(String name) {
-		return student.getStudentByName(name);
+		return studentDao.getStudentByName(name);
 	}
 
 	@Override
 	public Collection<Student> getAllStudents() {
-		return student.getAllStudents();
+		return studentDao.getAllStudents();
 	}
 
 	@Override
 	public void delStudent(int studentId) {
-		student.delStudent(student.getStudent(studentId));
+		studentDao.delStudent(studentDao.getStudent(studentId));
 	}
 
 	@Override
 	public void addDegreeToStudent(int studentId, int degreeId) {
-		Set<Degree> degrees = student.getStudent(studentId).getDegrees();
-		degrees.add(degree.getDegree(degreeId));
-		student.getStudent(studentId).setDegrees(degrees);
+		Set<Degree> degrees = studentDao.getStudent(studentId).getDegrees();
+		degrees.add(degreeDao.getDegree(degreeId));
+		studentDao.getStudent(studentId).setDegrees(degrees);
 	}
 
 	@Override
 	public void removeDegreeFromStudent(int studentId, int degreeId) {
-		Set<Degree> degrees = student.getStudent(studentId).getDegrees();
-		degrees.remove(degree.getDegree(degreeId));
-		student.getStudent(studentId).setDegrees(degrees);
+		Set<Degree> degrees = studentDao.getStudent(studentId).getDegrees();
+		degrees.remove(degreeDao.getDegree(degreeId));
+		studentDao.getStudent(studentId).setDegrees(degrees);
 	}
 
 	@Override
 	public boolean studentFulfillsDegreeRequirements(int studentId, int degreeId) {
-		Set <Course> studCourses = student.getStudent(studentId).getCourses();
-		Set <Course> reqCourses = degree.getDegree(degreeId).getRequiredCourses();		
+		Set <Course> studCourses = studentDao.getStudent(studentId).getCourses();
+		Set <Course> reqCourses = degreeDao.getDegree(degreeId).getRequiredCourses();		
 		return studCourses.containsAll(reqCourses);
 	}
 	

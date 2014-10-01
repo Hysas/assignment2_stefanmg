@@ -67,7 +67,7 @@ public class HibernateStudentDao implements StudentDAO{
 		
 		try {
 			tx = session.beginTransaction();			
-			students = session.createQuery("FROM course ORDER by id DESC").list();					
+			students = session.createQuery("FROM student ORDER by id DESC").list();					
 			tx.commit();
 		} catch (HibernateException e){
 			if (tx != null) tx.rollback();
