@@ -3,7 +3,7 @@
 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping package="no.uio.inf5750.assignment2">
 	<class name="no.uio.inf5750.assignment2.model.Degree" table="degree">
 		<meta attribute="class-description">
 			This class contains the degree details.
@@ -14,6 +14,7 @@
 		</id>
 		
 		<property name="type" type="string" unique="true"/>
+		
 		
 		<set name="requiredCourses" table="degree_requiredCourses" cascade="save-update">
 			<key column="degree_id"/>

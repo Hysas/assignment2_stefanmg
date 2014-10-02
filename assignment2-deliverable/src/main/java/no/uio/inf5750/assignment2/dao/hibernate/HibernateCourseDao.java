@@ -3,14 +3,12 @@ package no.uio.inf5750.assignment2.dao.hibernate;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.hibernate.SessionFactory;
-
 import no.uio.inf5750.assignment2.dao.CourseDAO;
 import no.uio.inf5750.assignment2.model.Course;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Transaction;
+import org.apache.log4j.Logger;
+import org.hibernate.SessionFactory;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,79 +32,44 @@ public class HibernateCourseDao implements CourseDAO {
 		return (Course) sessionFactory.getCurrentSession().get(Course.class, id);
 	}
 
+	
 	@Override
+	@SuppressWarnings("unchecked")
 	public Course getCourseByCourseCode(String courseCode) {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		Course course = null;
-		
-		try {
-			tx = session.beginTransaction();
-			@SuppressWarnings("unchecked")
-			List<Course> courses = session.createQuery("FROM Course ORDER by id DESC").list();
-			
-			if (!courses.isEmpty()) {
-				while (courses.iterator().hasNext()) {
-					course = courses.iterator().next();
-					if (course.getCourseCode().equals(courseCode)) break;
-				}
-			}
-			tx.commit();
-		} catch (HibernateException e){
-			if (tx != null) tx.rollback();
-			logger.error("DB query failed", e);
-		} finally {
-			session.close();
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(Course.class);
+		List<Course> courses = criteria.list();
+				
+		for(Course course : courses){
+			if (course.getCourseCode().equals(courseCode)) return course;
 		}		
-		return course;
+		
+		return null;			
 	}
 
+	
 	@Override
+	@SuppressWarnings("unchecked")
 	public Course getCourseByName(String name) {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		Course course = null;
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(Course.class);
+		List<Course> courses = criteria.list();
 		
-		try {
-			tx = session.beginTransaction();
-			@SuppressWarnings("unchecked")
-			List<Course> courses = session.createQuery("FROM Course ORDER by id DESC").list();
-			
-			if (!courses.isEmpty()) {
-				while (courses.iterator().hasNext()) {
-					course = courses.iterator().next();
-					if (course.getName().equals(name)) break;
-				}
-			}
-			tx.commit();
-		} catch (HibernateException e){
-			if (tx != null) tx.rollback();
-			logger.error("DB query failed", e);
-		} finally {
-			session.close();
+		for(Course course : courses){
+			if (course.getName().equals(name)) return course;
 		}		
-		return course;
+		
+		return null;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<Course> getAllCourses() {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		List<Course> courses = null;
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(Course.class);
+		Collection<Course> events = criteria.list();
 		
-		try {
-			tx = session.beginTransaction();			
-			courses = session.createQuery("FROM course ORDER by id DESC").list();					
-			tx.commit();
-		} catch (HibernateException e){
-			if (tx != null) tx.rollback();
-			logger.error("DB query failed", e);
-		} finally {
-			session.close();
-		}	
-		
-		return courses;
+		return events;
 	}
 
 	@Override

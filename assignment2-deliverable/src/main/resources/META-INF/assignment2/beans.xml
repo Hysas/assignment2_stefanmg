@@ -32,7 +32,7 @@
 		</property>
 		<property name="hibernateProperties">
 			<props>
-				<!-- <prop key="hibernate.show_sql">true</prop>-->
+				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
 				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop> -->
 				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
@@ -40,8 +40,7 @@
 		</property>
 	</bean>
 
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-		destroy-method="close">
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
 		<property name="driverClass" value="org.h2.Driver" />
 		<property name="jdbcUrl" value="jdbc:h2:mem:inf5750;DB_CLOSE_ON_EXIT=FALSE" />
 		<property name="user" value="sa" />

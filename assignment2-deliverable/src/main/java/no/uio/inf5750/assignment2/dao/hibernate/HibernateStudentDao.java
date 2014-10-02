@@ -4,12 +4,13 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
+import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 
 import no.uio.inf5750.assignment2.dao.StudentDAO;
+import no.uio.inf5750.assignment2.model.Course;
 import no.uio.inf5750.assignment2.model.Student;
 
 public class HibernateStudentDao implements StudentDAO{
@@ -17,7 +18,10 @@ public class HibernateStudentDao implements StudentDAO{
 	static Logger logger = Logger.getLogger(HibernateStudentDao.class);
 	private SessionFactory sessionFactory;
 
+	
+	
 	public void setSessionFactory(SessionFactory sessionFactory) {
+		Hibernate.initialize(sessionFactory);    
 		this.sessionFactory = sessionFactory;
 	}
 	
@@ -31,57 +35,33 @@ public class HibernateStudentDao implements StudentDAO{
 		return (Student) sessionFactory.getCurrentSession().get(Student.class, id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Student getStudentByName(String name) {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		Student student = null;
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(Course.class);
+		List<Student> students = criteria.list();
 		
-		try {
-			tx = session.beginTransaction();
-			@SuppressWarnings("unchecked")
-			List<Student> students = session.createQuery("FROM student ORDER by id DESC").list();
-			
-			if (!students.isEmpty()) {
-				while (students.iterator().hasNext()) {
-					student = students.iterator().next();
-					if (student.getName().equals(name)) break;
-				}
-			}
-			tx.commit();
-		} catch (HibernateException e){
-			if (tx != null) tx.rollback();
-			logger.error("DB query failed", e);
-		} finally {
-			session.close();
+		for(Student student : students){
+			if (student.getName().equals(name)) return student;
 		}		
-		return student;
+		
+		return null;		
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<Student> getAllStudents() {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		List<Student> students = null;
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(Student.class);
+		List<Student> students = criteria.list();
 		
-		try {
-			tx = session.beginTransaction();			
-			students = session.createQuery("FROM student ORDER by id DESC").list();					
-			tx.commit();
-		} catch (HibernateException e){
-			if (tx != null) tx.rollback();
-			logger.error("DB query failed", e);
-		} finally {
-			session.close();
-		}	
-		
-		return students;
+		return students;		
 	}
 
 	@Override
 	public void delStudent(Student student) {
-		sessionFactory.getCurrentSession().delete(student);
-	}
-	
+		Session session = sessionFactory.getCurrentSession();
+		session.delete(student);
+	}	
 }

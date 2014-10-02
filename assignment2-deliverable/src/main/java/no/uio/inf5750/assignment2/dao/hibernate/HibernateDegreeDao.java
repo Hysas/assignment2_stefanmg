@@ -4,12 +4,12 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 
 import no.uio.inf5750.assignment2.dao.DegreeDAO;
+import no.uio.inf5750.assignment2.model.Course;
 import no.uio.inf5750.assignment2.model.Degree;
 
 public class HibernateDegreeDao implements DegreeDAO{
@@ -31,58 +31,33 @@ public class HibernateDegreeDao implements DegreeDAO{
 		return (Degree) sessionFactory.getCurrentSession().get(Degree.class, id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Degree getDegreeByType(String type) {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		Degree degree = null;
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(Course.class);			
+		List<Degree> degrees = criteria.list();
 		
-		try {
-			tx = session.beginTransaction();
-			@SuppressWarnings("unchecked")
-			List<Degree> degrees = session.createQuery("FROM DEGREE ORDER by id DESC").list();
-			
-			if (!degrees.isEmpty()) {
-				while (degrees.iterator().hasNext()) {
-					degree = degrees.iterator().next();
-					if (degree.getType().equals(type)) break;
-				}
-			}
-			tx.commit();
-		} catch (HibernateException e){
-			if (tx != null) tx.rollback();
-			logger.error("DB query failed", e);
-		} finally {
-			session.close();
+		for(Degree degree : degrees){
+			if (degree.getType().equals(type)) return degree;
 		}		
-		return degree;
+		
+		return null;	
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<Degree> getAllDegrees() {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		List<Degree> degrees = null;
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(Degree.class);
+		List<Degree> events = criteria.list();
 		
-		try {
-			tx = session.beginTransaction();			
-			degrees = session.createQuery("FROM degree ORDER by id DESC").list();					
-			tx.commit();
-		} catch (HibernateException e){
-			if (tx != null) tx.rollback();
-			logger.error("DB query failed", e);
-		} finally {
-			session.close();
-		}	
-		
-		return degrees;
+		return events;	
 	}
 
 	@Override
 	public void delDegree(Degree degree) {
-		sessionFactory.getCurrentSession().delete(degree);
+		Session session = sessionFactory.getCurrentSession();
+		session.delete(degree);
 	}
-	
-
 }

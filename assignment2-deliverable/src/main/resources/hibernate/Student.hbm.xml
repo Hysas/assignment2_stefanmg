@@ -3,7 +3,7 @@
 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping package="no.uio.inf5750.assignment2">
 	<class name="no.uio.inf5750.assignment2.model.Student" table="student">
 		<meta attribute="class-description">
 			This class contains the student details.

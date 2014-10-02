@@ -3,7 +3,7 @@
 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping package="no.uio.inf5750.assignment2">
 	<class name="no.uio.inf5750.assignment2.model.Course" table="course">
 		<meta attribute="class-description">
 			This class contains the course details.
@@ -16,9 +16,9 @@
 		<property name="courseCode" type="string" not-null="true" unique="true"/>
 		<property name="name" type="string" not-null="true" unique="true"/>
 		
-		<set name="attendants" table="course_attendants" cascade="save-update">
+		<set name="attendants" cascade="save-update" table="course_attendants">
 			<key column="course_id"/>
-			<many-to-many column="student_id" class="no.uio.inf5750.assignment2.model.Student"/>
+			<many-to-many class="no.uio.inf5750.assignment2.model.Student"/>
 		</set>	
 	</class>
-</hibernate-mapping>
+</hibernate-mapping> 

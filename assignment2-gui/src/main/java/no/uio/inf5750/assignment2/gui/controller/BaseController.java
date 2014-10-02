@@ -1,6 +1,7 @@
 package no.uio.inf5750.assignment2.gui.controller;
 
 import java.util.Collection;
+
 import org.apache.log4j.Logger;
 
 import no.uio.inf5750.assignment2.model.Student;
@@ -55,7 +56,9 @@ public class BaseController {
 					"Health management information systems");
 
 			int master = studentSystem.addDegree("Master");
+			@SuppressWarnings("unused")
 			int bachelor = studentSystem.addDegree("Bachelor");
+			@SuppressWarnings("unused")
 			int phd = studentSystem.addDegree("PhD");
 
 			studentSystem.addAttendantToCourse(inf5750, john);
