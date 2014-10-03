@@ -17,7 +17,7 @@ public class DefaultStudentSystem implements StudentSystem{
 	
 	private CourseDAO courseDao;
 	private DegreeDAO degreeDao;
-	private StudentDAO studentDao;	
+	private StudentDAO studentDao;
 
 	public void setCourseDao(CourseDAO courseDao) {
 		Hibernate.initialize(courseDao);
